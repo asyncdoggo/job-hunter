@@ -1,9 +1,8 @@
 from .scraper import scrape_jobs
 import pandas as pd
 class JobMatcher:
-    def __init__(self, scraper, chatapi, parser) -> None:
+    def __init__(self, scraper, parser) -> None:
         self.scraper = scraper
-        self.chatapi = chatapi
         self.parser = parser
 
     def match_jobs(self, resume_file: str, search_term: str, location: str = ""):

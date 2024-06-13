@@ -2,9 +2,9 @@ import json
 import os
 import pathlib
 
-from app.scripts.Extractor import DataExtractor
-from app.scripts.KeytermsExtraction import KeytermExtractor
-from app.scripts.utils.Utils import CountFrequency, TextCleaner, generate_unique_id
+from ..Extractor import DataExtractor
+from ..KeytermsExtraction import KeytermExtractor
+from ..utils.Utils import CountFrequency, TextCleaner, generate_unique_id
 
 
 class ParseJobDesc:
