@@ -3,31 +3,14 @@ from fastapi.responses import JSONResponse
 from fastapi import UploadFile, File, Form, Depends
 from fastapi import HTTPException
 from fastapi import status
+from fastapi import Request
 from fastapi import Form
-from ..job.job_matching import JobMatcher
-from ..job.resume import ResumeParser
-from ..job.scraper import linkedinJobSpyScraper
+from ..job_utils.job_matching import JobMatcher
+from ..job_utils.resume import ResumeParser
+from ..job_utils.scraper import linkedinJobSpyScraper
 from typing import List
 
 
-# POST /job_matching
-# {
-#     "resume_file": "resume.pdf",
-#     "search_term": "designer",
-#     "location": "India"
-# }
-
-# Response
-# {
-#     "matched_jobs": [
-#         {
-#             "job_title": "UI Designer",
-#             "company": "Google",
-#             "location": "India",
-#             "description": "UI Designer job description",
-#             "easy_apply": True
-#         },
-#         ]
 router = APIRouter()
 
 from pydantic import BaseModel
@@ -42,16 +25,17 @@ class JobMatcherResponse(BaseModel):
 
 
 
-
 parser = ResumeParser()
 scraper = linkedinJobSpyScraper()
 matcher = JobMatcher(scraper, parser)
 
-from fastapi import Request
+
+
+from ..auth import get_current_user
 
 
 @router.post("/job_matching")
-async def job_matching(search_term: str=Form(...), location: str=Form(...), resume_file: List[UploadFile] = File(...)):
+async def job_matching(search_term: str=Form(...), location: str=Form(...), resume_file: List[UploadFile] = File(...), token: str = Depends(get_current_user)):
     with open("resume.pdf", "wb") as file_object:
         for chunk in resume_file:
             file_object.write(chunk.file.read())

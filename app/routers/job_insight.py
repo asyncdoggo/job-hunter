@@ -1,5 +1,6 @@
-from ..job.chatapi import GeminiAPI
-from fastapi import APIRouter
+from app.auth import get_current_user
+from ..job_utils.chatapi import GeminiAPI
+from fastapi import APIRouter, Depends
 from fastapi import HTTPException
 from fastapi import UploadFile
 from fastapi import File
@@ -29,7 +30,6 @@ Note: DO NOT INCLUDE ANYTHING ELSE OTHER THAN COVER LETTER IN THE RESPONSE.
 """
 
 
-# @router.post("/job-insight")
-# def job_insight(resume_file: UploadFile = File(...), job_description: str = Form(...) ) -> dict:
-#     try:
-#         resume_data = chatapi.get_response(resume_file.filename, job_description)
+@router.post("/job-insight")
+def job_insight(resume_file: UploadFile = File(...), job_description: str = Form(...), token: str = Depends(get_current_user)) -> dict:
+    pass
