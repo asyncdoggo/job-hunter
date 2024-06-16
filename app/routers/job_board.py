@@ -23,7 +23,7 @@ def get_db():
         db.close()
 
 # Job Board query
-@router.get("/job_board")
+@router.get("/job/board")
 async def job_board_get(token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     user_id = token["user_id"]
     try:
@@ -34,7 +34,7 @@ async def job_board_get(token: str = Depends(get_current_user), db: FireBaseData
 
 
 # Job Board insert
-@router.post("/job_board")
+@router.post("/job/board")
 async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     job_data = job.model_dump()
     job_data["user_id"] = token["user_id"]
@@ -46,19 +46,19 @@ async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user)
     return {"message": "Job added successfully", "job": job_data}
 
 # Job Board update
-@router.put("/job_board")
+@router.put("/job/board")
 async def job_board_update(job: JobBoard, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     job_data = job.model_dump()
     job_data["user_id"] = token["user_id"]
     try:
         db.update(job_data)
+        return {"message": "Job updated successfully", "job": job_data}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return {"message": "Job updated successfully", "job": job_data}
 
 
 # Job Board delete
-@router.delete("/job_board/{job_id}")
+@router.delete("/job/board/{job_id}")
 async def job_board_delete(job_id: str, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     user_id = token["user_id"]
     try:

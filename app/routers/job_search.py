@@ -9,6 +9,7 @@ from ..job_utils.job_matching import JobMatcher
 from ..job_utils.resume import ResumeParser
 from ..job_utils.scraper import linkedinJobSpyScraper
 from typing import List
+import json
 
 
 router = APIRouter()
@@ -34,7 +35,7 @@ matcher = JobMatcher(scraper, parser)
 from ..auth import get_current_user
 
 
-@router.post("/job_matching")
+@router.post("/job/match")
 async def job_matching(search_term: str=Form(...), location: str=Form(...), resume_file: List[UploadFile] = File(...), token: str = Depends(get_current_user)):
     with open("resume.pdf", "wb") as file_object:
         for chunk in resume_file:
@@ -44,8 +45,21 @@ async def job_matching(search_term: str=Form(...), location: str=Form(...), resu
 
     matched_jobs = matcher.match_jobs(resume_file, search_term, location)
 
-    matched_jobs = matched_jobs.to_json(orient="records")
+    matched_jobs = matched_jobs.to_dict(orient="records")
 
     return JSONResponse(content={"matched_jobs": matched_jobs}, status_code=status.HTTP_200_OK)
     
     
+@router.post("/job/search")
+async def job_search(search_data: JobMatcherRequest, token: str = Depends(get_current_user)):
+    try:
+        jobs = scraper.get_jobs(search_data.search_term, search_data.location, results_wanted=10)
+        jobs = jobs.to_dict(orient="records")
+        
+        # Date not serializable, fix by converting to string
+        # convert jobs to json
+        jobs = json.dumps(jobs, default=str)
+        jobs = json.loads(jobs)
+        return JSONResponse(content={"jobs": jobs}, status_code=status.HTTP_200_OK)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

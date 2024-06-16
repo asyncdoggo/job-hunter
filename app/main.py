@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI
 from app.routers import job_board
-from .routers import job_matching
+from .routers import job_search
 from fastapi.middleware.cors import CORSMiddleware
 import jwt
 import datetime
@@ -28,6 +28,6 @@ import firebase_admin.auth
 default_app = firebase_admin.initialize_app()
 
 
-app.include_router(job_matching.router)
+app.include_router(job_search.router)
 
 app.include_router(job_board.router)
