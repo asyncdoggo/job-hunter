@@ -10,6 +10,7 @@ from ..job_utils.resume import ResumeParser
 from ..job_utils.scraper import linkedinJobSpyScraper
 from typing import List
 import json
+import typing
 
 
 router = APIRouter()
@@ -23,7 +24,6 @@ class JobMatcherRequest(BaseModel):
 
 class JobMatcherResponse(BaseModel):
     matched_jobs: dict
-
 
 
 parser = ResumeParser()
@@ -54,12 +54,15 @@ async def job_matching(search_term: str=Form(...), location: str=Form(...), resu
 async def job_search(search_data: JobMatcherRequest, token: str = Depends(get_current_user)):
     try:
         jobs = scraper.get_jobs(search_data.search_term, search_data.location, results_wanted=10)
-        jobs = jobs.to_dict(orient="records")
+
+        jobs.fillna("", inplace=True)
         
-        # Date not serializable, fix by converting to string
-        # convert jobs to json
+        jobs = jobs.to_dict(orient="records")
+
+
         jobs = json.dumps(jobs, default=str)
         jobs = json.loads(jobs)
+
         return JSONResponse(content={"jobs": jobs}, status_code=status.HTTP_200_OK)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

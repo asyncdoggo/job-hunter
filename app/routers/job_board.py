@@ -38,7 +38,6 @@ async def job_board_get(token: str = Depends(get_current_user), db: FireBaseData
 async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     job_data = job.model_dump()
     job_data["user_id"] = token["user_id"]
-    job_data["job_id"] = uuid.uuid4().hex
     try:
         db.insert(job_data)
     except Exception as e:
@@ -62,7 +61,7 @@ async def job_board_update(job: JobBoard, token: str = Depends(get_current_user)
 async def job_board_delete(job_id: str, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     user_id = token["user_id"]
     try:
-        db.delete({"user_id": user_id, "job_id": job_id})
+        db.delete({"user_id": user_id, "id": job_id})
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     return {"message": "Job deleted successfully"}

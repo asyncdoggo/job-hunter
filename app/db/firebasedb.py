@@ -65,7 +65,7 @@ class FireBaseDatabase(Database):
 
     def insert(self, data: Dict[str, Any]) -> None:
         user_id = data.get("user_id")
-        job_id = data.get("job_id")
+        job_id = data.get("id")
         if user_id and job_id:
             user_doc = self.collection.document(user_id)
             # Create an array of jobs for the user
@@ -77,7 +77,7 @@ class FireBaseDatabase(Database):
 
     def update(self, data: Dict[str, Any]) -> None:
         user_id = data.get("user_id")
-        job_id = data.get("job_id")
+        job_id = data.get("id")
         
         if user_id and job_id:
             user_doc = self.collection.document(user_id)
@@ -90,7 +90,7 @@ class FireBaseDatabase(Database):
 
     def delete(self, data: Dict[str, Any]) -> None:
         user_id = data.get("user_id")
-        job_id = data.get("job_id")
+        job_id = data.get("id")
         if user_id and job_id:
             user_doc = self.collection.document(user_id)
             user_doc.collection("jobs").document(job_id).delete()

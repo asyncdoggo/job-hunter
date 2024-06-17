@@ -110,7 +110,10 @@ class linkedinJobSpyScraper(JobSpyScraper):
 
     def get_jobs(self, search_term: str, location: str = "", distance: int = 50, job_type: str = "", proxies: list = None, is_remote: bool = False, results_wanted: int = 10, easy_apply: bool = False, description_format: str = "markdown", offset: int = 0, hours_old: int = 0, verbose: int = 2, linkedin_company_ids: list = None, country_indeed: str = "usa"):
         jobs = super().get_jobs(site_names=["linkedin"], search_term=search_term, location=location, distance=distance, job_type=job_type, proxies=proxies, is_remote=is_remote, results_wanted=results_wanted, easy_apply=easy_apply, description_format=description_format, offset=offset, hours_old=hours_old, verbose=verbose, linkedin_company_ids=linkedin_company_ids, country_indeed=country_indeed)
-        jobs["description"] = jobs["job_url"].apply(self._scrape_data_from_linkedin)
+        # Check if jobs is not empty dataframe
+        if jobs.empty:
+            return jobs 
+        # jobs["description"] = jobs["job_url"].apply(self._scrape_data_from_linkedin)
         return jobs
     
     def _scrape_data_from_linkedin(self, url: str):

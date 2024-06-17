@@ -22,5 +22,5 @@ class JobBoard(BaseModel):
     salary: str
     location: str
     job_url: str
+    id: str  = None
     user_id: Optional[str] = None
-    job_id: Optional[str]  = None
