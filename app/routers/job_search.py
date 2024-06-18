@@ -37,6 +37,9 @@ from ..auth import get_current_user
 
 @router.post("/job/match")
 async def job_matching(search_term: str=Form(...), location: str=Form(...), resume_file: List[UploadFile] = File(...), token: str = Depends(get_current_user)):
+    if "error" in token:
+        raise HTTPException(status_code=400, detail=token["error"])
+
     with open("resume.pdf", "wb") as file_object:
         for chunk in resume_file:
             file_object.write(chunk.file.read())
@@ -52,6 +55,9 @@ async def job_matching(search_term: str=Form(...), location: str=Form(...), resu
     
 @router.post("/job/search")
 async def job_search(search_data: JobMatcherRequest, token: str = Depends(get_current_user)):
+    if "error" in token:
+        raise HTTPException(status_code=400, detail=token["error"])
+
     try:
         jobs = scraper.get_jobs(search_data.search_term, search_data.location, results_wanted=10)
 

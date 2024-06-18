@@ -25,6 +25,9 @@ def get_db():
 # Job Board query
 @router.get("/job/board")
 async def job_board_get(token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
+    if "error" in token:
+        raise HTTPException(status_code=400, detail=token["error"])
+    
     user_id = token["user_id"]
     try:
         jobs = db.query({"user_id": user_id})
@@ -36,6 +39,9 @@ async def job_board_get(token: str = Depends(get_current_user), db: FireBaseData
 # Job Board insert
 @router.post("/job/board")
 async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
+    if "error" in token:
+        raise HTTPException(status_code=400, detail=token["error"])
+
     job_data = job.model_dump()
     job_data["user_id"] = token["user_id"]
     try:
@@ -47,6 +53,9 @@ async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user)
 # Job Board update
 @router.put("/job/board")
 async def job_board_update(job: JobBoard, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
+    if "error" in token:
+        raise HTTPException(status_code=400, detail=token["error"])
+
     job_data = job.model_dump()
     job_data["user_id"] = token["user_id"]
     try:
@@ -59,6 +68,9 @@ async def job_board_update(job: JobBoard, token: str = Depends(get_current_user)
 # Job Board delete
 @router.delete("/job/board/{job_id}")
 async def job_board_delete(job_id: str, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
+    if "error" in token:
+        raise HTTPException(status_code=400, detail=token["error"])
+
     user_id = token["user_id"]
     try:
         db.delete({"user_id": user_id, "id": job_id})
