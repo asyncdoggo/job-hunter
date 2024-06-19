@@ -17,3 +17,4 @@ test_chatapi.py
 serviceAccountCreds.json
 .env
 logs
+firebase-credentials.json
