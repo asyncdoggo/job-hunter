@@ -1,7 +1,7 @@
-# Create the docker file for python3 and install the required packages
-# python version 3.11.x
-# FROM python:3.11.0a1-alpine3.14
-FROM python:3.11.9-alpine3.19 
+FROM python:3.11
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Set the working directory to current directory
 WORKDIR /code
