@@ -1,18 +1,14 @@
-import uuid
 from fastapi import APIRouter
 from fastapi import Depends
-
 from fastapi import HTTPException
+from app.auth import get_current_user
+from app.models.job import JobBoard
+from app.db.firebasedb import FireBaseDatabase
 
 
 
 
 router = APIRouter()
-
-from app.auth import get_current_user
-from app.models.job import JobBoard
-
-from app.db.firebasedb import FireBaseDatabase
 
 
 def get_db():
