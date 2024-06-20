@@ -14,13 +14,22 @@ class JobStatus(str, Enum):
     REJECTED = "rejected"
     FOLLOW_UP = "follow up"
 
+class JobType(str, Enum):
+    Onsite = "onsite"
+    Hybrid = "hybrid"
+    REMOTE = "remote"
+
 
 class JobBoard(BaseModel):
-    status: JobStatus
     company_name: str
     position: str
+    status: JobStatus
     salary: str
+    job_type: str
     location: str
     job_url: str
+    applied_date: str
+    deadline: str
+    description: str
     id: str  = None
     user_id: Optional[str] = None

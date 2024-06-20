@@ -6,8 +6,6 @@ from app.models.job import JobBoard
 from app.db.firebasedb import FireBaseDatabase
 
 
-
-
 router = APIRouter()
 
 
@@ -17,6 +15,12 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Job Board routes
+@router.get("/job")
+async def test_job():
+    print("Job Board routes")
+    return {"message": "Job Board routes"}
 
 # Job Board query
 @router.get("/job/board")
