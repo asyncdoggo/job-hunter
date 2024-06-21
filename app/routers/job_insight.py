@@ -1,21 +1,15 @@
-from app.auth import get_current_user
 from ..job_utils.chatapi import GeminiAPI
-from fastapi import APIRouter, Depends
-from fastapi import HTTPException
-from fastapi import UploadFile
-from fastapi import File
-from fastapi import Form
+from fastapi import APIRouter
 
 
-gemini_key = "GEMINI_API_KEY"  
+gemini_key = "GEMINI_API_KEY"
 
 gemini_config = {
     "temperature": 0.5,
     "top_p": 1.0,
 }
 
-chatapi = GeminiAPI(api_key=gemini_key, generation_config=gemini_config)    
-
+chatapi = GeminiAPI(api_key=gemini_key, generation_config=gemini_config)
 
 
 router = APIRouter()
@@ -30,6 +24,6 @@ Note: DO NOT INCLUDE ANYTHING ELSE OTHER THAN COVER LETTER IN THE RESPONSE.
 """
 
 
-@router.post("/job-insight")
-def job_insight(resume_file: UploadFile = File(...), job_description: str = Form(...), token: str = Depends(get_current_user)) -> dict:
-    pass
+# @router.post("/job-insight")
+# def job_insight(resume_file: UploadFile = File(...), job_description: str = Form(...), token: str = Depends(get_current_user)) -> dict:
+#     pass

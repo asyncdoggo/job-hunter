@@ -23,7 +23,7 @@ def get_db():
 async def job_board_get(token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     if "error" in token:
         raise HTTPException(status_code=400, detail=token["error"])
-    
+
     user_id = token["user_id"]
     try:
         jobs = db.query({"user_id": user_id})
@@ -51,6 +51,8 @@ async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user)
     return {"message": "Job added successfully", "job": job_data}
 
 # Job Board update
+
+
 @router.put("/job/board")
 async def job_board_update(job: JobBoard, token: str = Depends(get_current_user), db: FireBaseDatabase = Depends(get_db)) -> dict:
     if "error" in token:

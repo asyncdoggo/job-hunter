@@ -1,11 +1,10 @@
-from fastapi import Depends, FastAPI
+import firebase_admin.auth
+import firebase_admin
+import dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.routers import job_board
 from .routers import job_search
-from fastapi.middleware.cors import CORSMiddleware
-import jwt
-import datetime
-
-import dotenv
 
 dotenv.load_dotenv()
 
@@ -18,11 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-
-import firebase_admin
-import firebase_admin.auth
 
 
 default_app = firebase_admin.initialize_app()

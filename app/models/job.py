@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -12,6 +11,7 @@ class JobStatus(str, Enum):
     GHOSTED = "ghosted"
     REJECTED = "rejected"
     FOLLOW_UP = "follow up"
+
 
 class JobType(str, Enum):
     ONSITE = "onsite"
