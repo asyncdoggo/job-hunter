@@ -1,4 +1,3 @@
-
 from enum import Enum
 from typing import Optional
 
@@ -15,9 +14,10 @@ class JobStatus(str, Enum):
     FOLLOW_UP = "follow up"
 
 class JobType(str, Enum):
-    Onsite = "onsite"
-    Hybrid = "hybrid"
+    ONSITE = "onsite"
+    HYBRID = "hybrid"
     REMOTE = "remote"
+    NOT_SPECIFIED = "not specified"
 
 
 class JobBoard(BaseModel):
@@ -25,11 +25,10 @@ class JobBoard(BaseModel):
     position: str
     status: JobStatus
     salary: str
-    job_type: str
+    job_type: JobType
     location: str
     job_url: str
     applied_date: str
     deadline: str
-    description: str
-    id: str  = None
+    id: Optional[str] = None
     user_id: Optional[str] = None

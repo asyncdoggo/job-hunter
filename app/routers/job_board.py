@@ -1,3 +1,4 @@
+import random
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
@@ -16,11 +17,6 @@ def get_db():
     finally:
         db.close()
 
-# Job Board routes
-@router.get("/job")
-async def test_job():
-    print("Job Board routes")
-    return {"message": "Job Board routes"}
 
 # Job Board query
 @router.get("/job/board")
@@ -33,7 +29,7 @@ async def job_board_get(token: str = Depends(get_current_user), db: FireBaseData
         jobs = db.query({"user_id": user_id})
         return {"jobs": jobs}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 # Job Board insert
@@ -44,10 +40,14 @@ async def job_board_insert(job: JobBoard, token: str = Depends(get_current_user)
 
     job_data = job.model_dump()
     job_data["user_id"] = token["user_id"]
+
+    if not job_data["id"]:
+        job_data["id"] = str(random.randint(1000000000, 9999999999))
+
     try:
         db.insert(job_data)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
     return {"message": "Job added successfully", "job": job_data}
 
 # Job Board update
@@ -62,7 +62,7 @@ async def job_board_update(job: JobBoard, token: str = Depends(get_current_user)
         db.update(job_data)
         return {"message": "Job updated successfully", "job": job_data}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 # Job Board delete
@@ -75,5 +75,5 @@ async def job_board_delete(job_id: str, token: str = Depends(get_current_user), 
     try:
         db.delete({"user_id": user_id, "id": job_id})
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
     return {"message": "Job deleted successfully"}

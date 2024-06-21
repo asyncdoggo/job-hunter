@@ -10,14 +10,13 @@ from ..job_utils.resume import ResumeParser
 from ..job_utils.scraper import linkedinJobSpyScraper
 from typing import List
 import json
-import typing
 
 
 router = APIRouter()
 
 from pydantic import BaseModel
 
-class JobMatcherRequest(BaseModel):
+class JobSearchRequest(BaseModel):
     search_term: str
     location: str
 
@@ -53,8 +52,22 @@ async def job_matching(search_term: str=Form(...), location: str=Form(...), resu
     return JSONResponse(content={"matched_jobs": matched_jobs}, status_code=status.HTTP_200_OK)
     
     
+
+class JobResponseModel(BaseModel):
+    id: str
+    job_url: str 
+    title: str # position
+    company: str # company_name
+    location: str
+    job_type: str
+
+
+class JobSearchResponse(BaseModel):
+    jobs: List[JobResponseModel]
+
+
 @router.post("/job/search")
-async def job_search(search_data: JobMatcherRequest, token: str = Depends(get_current_user)):
+async def job_search(search_data: JobSearchRequest, token: str = Depends(get_current_user)):
     if "error" in token:
         raise HTTPException(status_code=400, detail=token["error"])
 
@@ -69,6 +82,8 @@ async def job_search(search_data: JobMatcherRequest, token: str = Depends(get_cu
         jobs = json.dumps(jobs, default=str)
         jobs = json.loads(jobs)
 
+        jobs = [{key: value for key, value in job.items() if key in JobResponseModel.model_fields} for job in jobs]
+
         return JSONResponse(content={"jobs": jobs}, status_code=status.HTTP_200_OK)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
