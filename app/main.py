@@ -13,7 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["jobhunt-ea01a.web.app","jobhunt-ea01a.firebaseapp.com"],
+    allow_origins=["https://jobhunt-ea01a.web.app","https://jobhunt-ea01a.firebaseapp.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
