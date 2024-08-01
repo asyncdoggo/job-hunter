@@ -1,13 +1,11 @@
+import dotenv
+dotenv.load_dotenv()
 import os
 from fastapi import FastAPI
 from app.routers import cover_letter, job_board
 from .routers import job_search
 from fastapi.middleware.cors import CORSMiddleware
 
-
-import dotenv
-
-dotenv.load_dotenv()
 
 app = FastAPI()
 
