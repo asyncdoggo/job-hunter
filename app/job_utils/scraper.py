@@ -117,10 +117,15 @@ class linkedinJobSpyScraper(JobSpyScraper):
         return jobs
     
     def _scrape_data_from_linkedin(self, url: str):
-        finding_class = "description__text"
+        """
+        Deprecated
+        """
+        return DeprecationWarning("This method is deprecated. Cannot access LinkedIn job pages using requests anymore.")
+
+        finding_id = "job-details"
         content = requests.get(url).content
         soup = bs4.BeautifulSoup(content, "html.parser")
-        description = soup.find("div", class_=finding_class)
+        description = soup.find("div", {"id": finding_id})
         try:
             # get all paragraphs in the description
             paragraphs = description.find_all("p")
