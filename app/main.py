@@ -1,3 +1,4 @@
+import os
 from fastapi import Depends, FastAPI
 from app.routers import job_board
 from .routers import job_search
@@ -11,14 +12,15 @@ dotenv.load_dotenv()
 
 app = FastAPI()
 
+allowed_origins = os.getenv("ALLOWED_ORIGINS").split(" ")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://jobhunt-ea01a.web.app","https://jobhunt-ea01a.firebaseapp.com"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 
 import firebase_admin
