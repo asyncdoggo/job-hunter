@@ -27,7 +27,14 @@ prompt = """
 Below is a resume and a job description both in plain text format. 
 Understand the resume contents, especially experience, expertise, projects and skill set. 
 Compare the resume and job description to understand the missing skills and requirements. 
-Use your understanding to provide a curated cover letter, tailored for the provided job description. Make sure to add the job description keywords into the cover letter. Keep the cover letter short, crisp and professional. Do not exceed 3 paragraphs. 
+Use your understanding to provide a curated cover letter, tailored for the provided job description. Make sure to add the job description keywords into the cover letter. Keep the cover letter short, crisp and professional.
+
+Cover Letter format:
+Single line introduction, very short
+next paragraph: Why you are a good fit for the job, very short
+next paragraph: How you can contribute to the company, very short
+end with a closing line, very short
+
 Note: DO NOT INCLUDE ANYTHING ELSE OTHER THAN COVER LETTER IN THE RESPONSE.
 
 Resume:

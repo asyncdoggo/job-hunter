@@ -18,3 +18,4 @@ serviceAccountCreds.json
 .env
 logs
 firebase-credentials.json
+test_gemini.ipynb
