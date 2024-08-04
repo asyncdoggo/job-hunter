@@ -18,6 +18,7 @@ router = APIRouter()
 class JobSearchRequest(BaseModel):
     search_term: str
     location: str
+    offset: int = 0
 
 
 class JobMatcherResponse(BaseModel):
@@ -66,9 +67,13 @@ async def job_search(search_data: JobSearchRequest, token: str = Depends(get_cur
         raise HTTPException(status_code=400, detail=token["error"])
 
     try:
-        jobs = scraper.get_jobs(search_data.search_term,
-                                search_data.location, results_wanted=10)
-
+        jobs = scraper.get_jobs(
+                                search_data.search_term,
+                                search_data.location, 
+                                results_wanted=10,
+                                offset=search_data.offset * 10
+                                )
+        
         jobs.fillna("", inplace=True)
 
         jobs = jobs.to_dict(orient="records")
