@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 from typing import List
 from pydantic import BaseModel
@@ -15,10 +16,23 @@ from ..job_utils.scraper import linkedinJobSpyScraper
 router = APIRouter()
 
 
+class JobType(Enum):
+    FULL_TIME = "fulltime",
+    PART_TIME = "parttime"
+    CONTRACT = "contract"
+    TEMPORARY = "temporary"
+    INTERNSHIP = "internship"
+    PER_DIEM = "perdiem"
+    NIGHTS = "nights"
+    OTHER = "other"
+    SUMMER = "summer"
+    VOLUNTEER = "volunteer"
+
 class JobSearchRequest(BaseModel):
     search_term: str
     location: str
     offset: int = 0
+    job_type: JobType = "fulltime"
 
 
 class JobMatcherResponse(BaseModel):
@@ -71,7 +85,8 @@ async def job_search(search_data: JobSearchRequest, token: str = Depends(get_cur
                                 search_data.search_term,
                                 search_data.location, 
                                 results_wanted=10,
-                                offset=search_data.offset * 10
+                                offset=search_data.offset * 10,
+                                job_type=search_data.job_type.value
                                 )
         
         jobs.fillna("", inplace=True)
