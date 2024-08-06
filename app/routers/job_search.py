@@ -10,14 +10,14 @@ from fastapi import status
 from ..auth import get_current_user
 from ..job_utils.job_matching import JobMatcher
 from ..job_utils.resume import ResumeParser
-from ..job_utils.scraper import linkedinJobSpyScraper
+from ..job_utils.scraper import JobSpyScraper, linkedinJobSpyScraper
 
 
 router = APIRouter()
 
 
 class JobType(Enum):
-    FULL_TIME = "fulltime",
+    FULL_TIME = "fulltime"
     PART_TIME = "parttime"
     CONTRACT = "contract"
     TEMPORARY = "temporary"
@@ -40,7 +40,7 @@ class JobMatcherResponse(BaseModel):
 
 
 parser = ResumeParser()
-scraper = linkedinJobSpyScraper()
+scraper = JobSpyScraper()
 matcher = JobMatcher(scraper, parser)
 
 
@@ -69,6 +69,7 @@ class JobResponseModel(BaseModel):
     company: str  # company_name
     location: str
     job_type: str
+    site: str
 
 
 class JobSearchResponse(BaseModel):
@@ -82,8 +83,8 @@ async def job_search(search_data: JobSearchRequest, token: str = Depends(get_cur
 
     try:
         jobs = scraper.get_jobs(
-                                search_data.search_term,
-                                search_data.location, 
+                                search_term=search_data.search_term,
+                                location=search_data.location, 
                                 results_wanted=10,
                                 offset=search_data.offset * 10,
                                 job_type=search_data.job_type.value

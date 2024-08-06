@@ -16,7 +16,7 @@ class JobSpyScraper(Scraper):
     def __init__(self):
         super().__init__()
 
-    def get_jobs(self, site_names: list = [], search_term: str = "", location: str = "", distance: int = 50, job_type: str = None, proxies: list = None, is_remote: bool = False, results_wanted: int = 10, easy_apply: bool = False, description_format: str = "markdown", offset: int = 0, hours_old: int = 0, verbose: int = 2, linkedin_fetch_description: bool = False, linkedin_company_ids: list = None, country_indeed: str = 'usa'):
+    def get_jobs(self, site_names: list = None, search_term: str = "", location: str = "", distance: int = 50, job_type: str = None, proxies: list = None, is_remote: bool = False, results_wanted: int = 10, easy_apply: bool = False, description_format: str = "markdown", offset: int = 0, hours_old: int = 0, verbose: int = 2, linkedin_fetch_description: bool = False, linkedin_company_ids: list = None, country_indeed: str = 'usa'):
         jobs = scrape_jobs(
             site_name=site_names,
             search_term=search_term,
